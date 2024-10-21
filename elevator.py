@@ -39,15 +39,6 @@ class Elevator:
                     # Если запросов нет, лифт остается на текущем этаже и ждет
                     yield self.env.timeout(1)
 
-    # def find_next_request(self):
-    #     """Поиск следующего этажа по направлению"""
-    #     for floor in range(self.current_floor + self.direction, 10 if self.direction == 1 else 0, self.direction):
-    #         if self.requests[floor][self.direction_to_str()]:
-    #             return floor
-    #     # Если запросов нет, меняем направление
-    #     self.direction *= -1
-    #     return None
-
     def find_closest_request(self):
         """Поиск ближайшего этажа с запросом"""
         closest_floor = None
@@ -79,11 +70,6 @@ class Elevator:
         yield self.env.timeout(self.travel_time * travel_floors)
         self.current_floor = target_floor
         print(f"Лифт прибыл на {self.current_floor} в {self.env.now}")
-
-    # def load_unload_passengers(self):
-    #     """Процесс загрузки/выгрузки пассажиров"""
-    #     print(f"Лифт загружает/выгружает пассажиров на {self.current_floor} в {self.env.now}")
-    #     yield self.env.timeout(self.travel_time)  # Время загрузки/выгрузки пассажиров
         
     def load_unload_passengers(self):
         """Загрузка и выгрузка пассажиров"""
