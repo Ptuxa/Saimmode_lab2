@@ -1,42 +1,27 @@
 import simpy
-import random
+import numpy as np
 
-from elevetorSystem import ElevatorSystem, LiftSystem
-    
-NUM_FLOORS = 9
-NUM_ELEVATORS = 2
-    
-ELEVATOR_CAPACITIES = [6, 8]  
-TRAVEL_TIME = 1  
-LOAD_PASSENGERS_TIME = 0.5
-SIMULATION_TIME = 120
+from elevetorSystem import ElevatorSystem
 
-PROBABILITY_FLOOR_MATRIX = [
-    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],  # Этаж 1 -> на каждый другой этаж
-    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],  # Этаж 2 -> на каждый другой этаж
-    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],  # Этаж 0 -> на каждый другой этаж
-    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],  # Этаж 3 -> на каждый другой этаж
-    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],  # Этаж 4 -> на каждый другой этаж
-    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],  # Этаж 5 -> на каждый другой этаж
-    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],  # Этаж 6 -> на каждый другой этаж
-    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]   # Этаж 7 -> на каждый другой этаж
-    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]   # Этаж 8 -> на каждый другой этаж
+# Входные данные
+TRAVEL_TIME = 10  # Время движения лифта от этажа до этажа (сек)
+LOAD_TIME = 5  # Время загрузки лифта (сек)
+FLOOR_FREQUENCY = [0.2, 0.3, 0.5, 0.1, 0.4, 0.2, 0.6, 0.4, 0.3]  # Частота пассажиров на каждом этаже (в мин)
+CAPACITIES = [6, 8]  # Вместимость лифтов
+PROBABILITY_MATRIX = [
+    [0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],  # The 1st floor -> to every other floor. 
+    [0.1, 0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],  # The 2nd floor -> to every other floor. 
+    [0.1, 0.1, 0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],  # The 3rd floor -> to every other floor. 
+    [0.1, 0.1, 0.1, 0, 0.1, 0.1, 0.1, 0.1, 0.1],  # The 4th floor -> to every other floor. 
+    [0.1, 0.1, 0.1, 0.1, 0, 0.1, 0.1, 0.1, 0.1],  # The 5th floor -> to every other floor. 
+    [0.1, 0.1, 0.1, 0.1, 0.1, 0, 0.1, 0.1, 0.1],  # The 6th floor -> to every other floor. 
+    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0, 0.1, 0.1],  # The 7th floor -> to every other floor. 
+    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0, 0.1],   # The 8th floor -> to every other floor. 
+    [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0]   # The 9th floor -> to every other floor. 
 ]
+TIME_LIMIT = 120  # Ограничение по времени (минуты)
 
-FLOOR_FREQUENCIES = [0.1, 0.15, 0.2, 0.1, 0.1, 0.1, 0.05, 0.1, 0.1]
-
-
-def main(num_elevators, num_floors, elevator_capacities, travel_time, load_passengers_time, probability_floor_matrix, floor_frequencies):
-    env = simpy.Environment()
-    system = ElevatorSystem(env, num_elevators, elevator_capacities, travel_time, load_passengers_time)
-
-    for i in range(10):
-        start_floor = random.randint(0, 8)
-        target_floor = random.randint(0, 8)
-        if start_floor != target_floor:
-            system.request_elevator(start_floor, target_floor)
-            yield env.timeout(random.uniform(2, 5)) 
-
-    env.run(until=SIMULATION_TIME) 
-    
-main(NUM_ELEVATORS, NUM_FLOORS, ELEVATOR_CAPACITIES, TRAVEL_TIME, LOAD_PASSENGERS_TIME, PROBABILITY_FLOOR_MATRIX, FLOOR_FREQUENCIES)
+# Запуск симуляции
+env = simpy.Environment()
+elevator_system = ElevatorSystem(env, num_elevators=2, capacities=CAPACITIES, travel_time=TRAVEL_TIME, load_time=LOAD_TIME, floor_frequency=FLOOR_FREQUENCY, probability_matrix=PROBABILITY_MATRIX)
+env.run(until=TIME_LIMIT)
