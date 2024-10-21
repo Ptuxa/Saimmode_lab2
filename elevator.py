@@ -1,12 +1,13 @@
 class Elevator:
-    def __init__(self, env, current_floor, capacity, travel_time, load_time):
+    def __init__(self, env, current_floor, capacity, travel_time, load_time, floors):
         self.env = env
         self.current_floor = current_floor  # Текущий этаж
         self.capacity = capacity  # Вместимость лифта
-        self.requests = {floor: {'up': [], 'down': []} for floor in range(9)}  # Запросы на каждом этаже (массив запросов)
+        self.travel_time = travel_time
         self.load_time = load_time
-        self.travel_time = travel_time 
+        self.floors = floors  # Список всех этажей, для доступа к их очередям
         self.direction = 0  # 1 - вверх, -1 - вниз, 0 - стоит
+        self.passengers = []  # Пассажиры в лифте
 
     def run(self):
         """Основная логика работы лифта"""
@@ -29,7 +30,7 @@ class Elevator:
                 next_floor = self.find_next_request()
                 
                 # Лифт движется в направлении, если есть запросы на текущем этаже
-                if self.requests[self.current_floor][self.direction_to_str()]:
+                if self.floors[self.current_floor].requests[self.direction_to_str()]:
                     yield self.env.process(self.load_unload_passengers())
                 
                 if next_floor is not None:
@@ -38,14 +39,14 @@ class Elevator:
                     # Если запросов нет, лифт остается на текущем этаже и ждет
                     yield self.env.timeout(1)
 
-    def find_next_request(self):
-        """Поиск следующего этажа по направлению"""
-        for floor in range(self.current_floor + self.direction, 10 if self.direction == 1 else 0, self.direction):
-            if self.requests[floor][self.direction_to_str()]:
-                return floor
-        # Если запросов нет, меняем направление
-        self.direction *= -1
-        return None
+    # def find_next_request(self):
+    #     """Поиск следующего этажа по направлению"""
+    #     for floor in range(self.current_floor + self.direction, 10 if self.direction == 1 else 0, self.direction):
+    #         if self.requests[floor][self.direction_to_str()]:
+    #             return floor
+    #     # Если запросов нет, меняем направление
+    #     self.direction *= -1
+    #     return None
 
     def find_closest_request(self):
         """Поиск ближайшего этажа с запросом"""
@@ -54,13 +55,13 @@ class Elevator:
 
         # Проходим по всем этажам и находим ближайший с запросом
         for floor in range(9):
-            if any(self.requests[floor].values()):
+            if any(self.floors[self.current_floor].requests.values()):
                 distance = abs(self.current_floor - floor)
                 if distance < min_distance:
                     closest_floor = floor
                     min_distance = distance
                     
-        if self.requests[floor]['down']:
+        if self.floors[floor].requests['down']:
             self.direction = -1 
         else:
             self.direction = 1
@@ -79,7 +80,32 @@ class Elevator:
         self.current_floor = target_floor
         print(f"Лифт прибыл на {self.current_floor} в {self.env.now}")
 
+    # def load_unload_passengers(self):
+    #     """Процесс загрузки/выгрузки пассажиров"""
+    #     print(f"Лифт загружает/выгружает пассажиров на {self.current_floor} в {self.env.now}")
+    #     yield self.env.timeout(self.travel_time)  # Время загрузки/выгрузки пассажиров
+        
     def load_unload_passengers(self):
-        """Процесс загрузки/выгрузки пассажиров"""
+        """Загрузка и выгрузка пассажиров"""
         print(f"Лифт загружает/выгружает пассажиров на {self.current_floor} в {self.env.now}")
-        yield self.env.timeout(self.travel_time)  # Время загрузки/выгрузки пассажиров
+        
+        # Выгрузка пассажиров на нужном этаже
+        self.passengers = [p for p in self.passengers if p != self.current_floor]
+
+        # Загрузка новых пассажиров с очереди
+        current_floor_requests = self.floors[self.current_floor].requests[self.direction_to_str()]
+        while current_floor_requests and len(self.passengers) < self.capacity:
+            target_floor = current_floor_requests.pop(0)
+            self.passengers.append(target_floor)
+
+        yield self.env.timeout(self.load_time)
+
+    def find_next_request(self):
+        
+        """Поиск следующего этажа с запросом"""
+        for floor in range(self.current_floor + self.direction, 9 if self.direction == 1 else -1, self.direction):
+            if self.floors[floor].requests[self.direction_to_str()]:
+                return floor
+            
+        self.direction = 0
+        return None
