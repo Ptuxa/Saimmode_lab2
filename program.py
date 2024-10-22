@@ -1,5 +1,4 @@
 import simpy
-import numpy as np
 
 from elevetorSystem import ElevatorSystem
 
@@ -20,12 +19,16 @@ PROBABILITY_MATRIX = [
     [0.2, 0.1, 0.1, 0.1, 0.1, 0.2, 0.1, 0, 0.1],   # The 8th floor -> to every other floor. 
     [0.2, 0.1, 0.1, 0.1, 0.1, 0.2, 0.1, 0.1, 0]   # The 9th floor -> to every other floor. 
 ]
-TIME_LIMIT = 20  # Ограничение по времени (мин)
+TIME_LIMIT = 5  # Ограничение по времени (мин)
+NUMBER_OF_RUNS = 1
 
 # Запуск симуляции
 env = simpy.Environment()
-elevator_system = ElevatorSystem(env, num_elevators=NUM_ELEVATORS, capacities=CAPACITIES, travel_time=TRAVEL_TIME, load_time=LOAD_TIME, floor_frequency=FLOOR_FREQUENCY, probability_matrix=PROBABILITY_MATRIX)
-env.run(until=TIME_LIMIT)
+elevator_system = ElevatorSystem(env, num_elevators=NUM_ELEVATORS, capacities=CAPACITIES, travel_time=TRAVEL_TIME, load_time=LOAD_TIME, floor_frequency=FLOOR_FREQUENCY, probability_matrix=PROBABILITY_MATRIX, time=TIME_LIMIT, number_of_runs=NUMBER_OF_RUNS)
 
 print()
+elevator_system.start()
+print()
+print()
+
 elevator_system.report_statistics(TIME_LIMIT)
