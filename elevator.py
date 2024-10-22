@@ -1,13 +1,16 @@
 class Elevator:
-    def __init__(self, env, current_floor, capacity, travel_time, load_time, floors):
+    def __init__(self, env, elevator_id, capacity, travel_time, load_time, floors):
         self.env = env
-        self.current_floor = current_floor  # Текущий этаж
-        self.capacity = capacity  # Вместимость лифта
+        self.id = elevator_id
+        self.capacity = capacity
         self.travel_time = travel_time
         self.load_time = load_time
-        self.floors = floors  # Список всех этажей, для доступа к их очередям
-        self.direction = 0  # 1 - вверх, -1 - вниз, 0 - стоит
-        self.passengers = []  # Пассажиры в лифте
+        self.current_floor = 0
+        self.direction = 0
+        self.total_trips = 0
+        self.passengers = []
+        self.floors = floors
+        self.process = env.process(self.run())
 
     def run(self):
         """Основная логика работы лифта"""
@@ -65,15 +68,16 @@ class Elevator:
 
     def move_to_floor(self, target_floor):
         """Перемещение лифта на другой этаж"""
-        print(f"Лифт перемещается с {self.current_floor} на {target_floor} в {self.env.now}")
+        self.total_trips = self.total_trips + 1 
+        print(f"Лифт {self.id + 1} перемещается с {self.current_floor + 1} на {target_floor + 1} в момент времени {self.env.now}")
         travel_floors = abs(self.current_floor - target_floor)  # Время перемещения пропорционально расстоянию
         yield self.env.timeout(self.travel_time * travel_floors)
         self.current_floor = target_floor
-        print(f"Лифт прибыл на {self.current_floor} в {self.env.now}")
+        print(f"Лифт {self.id + 1} прибыл на этаж {self.current_floor + 1} в момент времени {self.env.now}")
         
     def load_unload_passengers(self):
         """Загрузка и выгрузка пассажиров"""
-        print(f"Лифт загружает/выгружает пассажиров на {self.current_floor} в {self.env.now}")
+        print(f"Лифт {self.id + 1} выгружает пассажиров на {self.current_floor + 1} в момент времени {self.env.now}")
         
         # Выгрузка пассажиров на нужном этаже
         self.passengers = [p for p in self.passengers if p != self.current_floor]
