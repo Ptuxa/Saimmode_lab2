@@ -20,7 +20,7 @@ PROBABILITY_MATRIX = [
     [0.2, 0.1, 0.1, 0.1, 0.1, 0.2, 0.1, 0, 0.1],   # The 8th floor -> to every other floor. 
     [0.2, 0.1, 0.1, 0.1, 0.1, 0.2, 0.1, 0.1, 0]   # The 9th floor -> to every other floor. 
 ]
-TIME_LIMIT = 120  # Ограничение по времени (мин)
+TIME_LIMIT = 20  # Ограничение по времени (мин)
 
 # Запуск симуляции
 env = simpy.Environment()

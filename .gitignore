@@ -1,2 +1,2 @@
-changelog.config.js
 __pycache__/*
+.vscode/launch.json

@@ -32,15 +32,10 @@ class Elevator:
                 # Поиск следующего этажа
                 next_floor = self.find_next_request()
                 
-                # Лифт движется в направлении, если есть запросы на текущем этаже
-                if self.floors[self.current_floor].requests[self.direction_to_str()]:
-                    yield self.env.process(self.load_unload_passengers())
-                
                 if next_floor is not None:
+                    # Лифт движется в направлении, если есть запросы на текущем этаже
                     yield self.env.process(self.move_to_floor(next_floor))
-                else:
-                    # Если запросов нет, лифт остается на текущем этаже и ждет
-                    yield self.env.timeout(1)
+                    yield self.env.process(self.load_unload_passengers())
 
     def find_closest_request(self):
         """Поиск ближайшего этажа с запросом"""
@@ -49,17 +44,21 @@ class Elevator:
 
         # Проходим по всем этажам и находим ближайший с запросом
         for floor in range(9):
-            if any(self.floors[self.current_floor].requests.values()):
+            if any(self.floors[floor].requests.values()):
                 distance = abs(self.current_floor - floor)
                 if distance < min_distance:
                     closest_floor = floor
                     min_distance = distance
-                    
-        if self.floors[floor].requests['down']:
-            self.direction = -1 
-        else:
-            self.direction = 1
 
+        if closest_floor != None:              
+            if len(self.floors[closest_floor].requests['down']) > 0:
+                self.direction = -1 
+            else:
+                self.direction = 1
+        else:            
+            self.direction = 0
+            return None
+            
         return closest_floor
 
     def direction_to_str(self):
@@ -69,7 +68,7 @@ class Elevator:
     def move_to_floor(self, target_floor):
         """Перемещение лифта на другой этаж"""
         self.total_trips = self.total_trips + 1 
-        print(f"Лифт {self.id + 1} перемещается с {self.current_floor + 1} на {target_floor + 1} в момент времени {self.env.now}")
+        print(f"Лифт {self.id + 1} перемещается с {self.current_floor + 1} этажа на {target_floor + 1} этаж в момент времени {self.env.now}")
         travel_floors = abs(self.current_floor - target_floor)  # Время перемещения пропорционально расстоянию
         yield self.env.timeout(self.travel_time * travel_floors)
         self.current_floor = target_floor
@@ -77,7 +76,7 @@ class Elevator:
         
     def load_unload_passengers(self):
         """Загрузка и выгрузка пассажиров"""
-        print(f"Лифт {self.id + 1} выгружает пассажиров на {self.current_floor + 1} в момент времени {self.env.now}")
+        print(f"Лифт {self.id + 1} выгружает пассажиров на {self.current_floor + 1} этаж в момент времени {self.env.now}")
         
         # Выгрузка пассажиров на нужном этаже
         self.passengers = [p for p in self.passengers if p != self.current_floor]
@@ -93,9 +92,23 @@ class Elevator:
     def find_next_request(self):
         
         """Поиск следующего этажа с запросом"""
+        
+        close_floor = float('inf')
+        min_distance = float('inf')
         for floor in range(self.current_floor + self.direction, 9 if self.direction == 1 else -1, self.direction):
             if self.floors[floor].requests[self.direction_to_str()]:
-                return floor
+                if floor != self.current_floor:
+                    close_floor = floor
+                    min_distance = abs(close_floor - floor)
+                
+        for i in range(len(self.passengers)):   
+            if self.passengers[i] != self.current_floor:  
+                if (abs(self.passengers[i] - self.current_floor) < min_distance):
+                    min_distance = abs(self.passengers[i] - self.current_floor)
+                    close_floor = self.passengers[i]
+        
+        if (close_floor != float('inf')):
+            return close_floor
             
         self.direction = 0
         return None
