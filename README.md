@@ -12,3 +12,11 @@ Conditions:
 3) There should be a queue of events and actions.
 4) If the elevator is vacated, it moves to the nearest floor of the current requests with the preference to move down, when contradictions arise.  
 5) The passengers can exit the elevator and new ones enter. 
+
+Responses:
+- Discrete:
+    1) Total number of trips.
+    2) Total number of passengers who rode in the elevator.
+    3) Total number of passengers wishing to use the elevators.
+- Сontinuous:
+    1) Total waiting time for the elevator by the passenger.
