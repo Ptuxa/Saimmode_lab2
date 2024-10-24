@@ -19,4 +19,4 @@ Responses:
     2) Total number of passengers who rode in the elevator.
     3) Total number of passengers wishing to use the elevators.
 - Сontinuous:
-    1) Total waiting time for the elevator by the passenger.
+    1) Total waiting time to reach the target floor by the passenger.
