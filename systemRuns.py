@@ -43,7 +43,7 @@ class SystemRuns:
         number_runs = self.data['number_runs']
         print()
         print(f"======================= Статиситика прогонов (усреднённая): =========================================")
-        print(f"\tОбщее время ожидания пассажирами: {self.runs_total_waiting_pass_destination / number_runs}")
+        # print(f"\tОбщее время ожидания пассажирами: {self.runs_total_waiting_pass_destination / number_runs}")
         print(f"\tОбщее число проезжащих в лифтах пассажиров: {self.runs_total_passengers_in_elevators / number_runs}")
         if (self.runs_average_time_of_waititng != float):
             print(f"\tСреднее время ожидания пассажирами: {self.runs_average_time_of_waititng / number_runs}")
