@@ -87,7 +87,7 @@ class Elevator:
         
         for passengerInfo in self.passengers[:]:
             if passengerInfo[0] == self.current_floor:
-                self.total_waiting_pass_destination = self.total_waiting_pass_destination + (self.timer_counter - passengerInfo[1])
+                self.total_waiting_pass_destination = self.total_waiting_pass_destination + (self.timer_counter - passengerInfo[1]) + self.load_time
                 self.passengers.remove(passengerInfo)                
         
         # print(f"После выгрузки в лифте {self.id + 1} стало {len(self.passengers)} человек")
