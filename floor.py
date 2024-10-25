@@ -25,7 +25,7 @@ class Floor:
             print(f"Пассажир стоит в очереди на {self.floor_id + 1} этаже, намеревается ехать на {target_floor + 1} этаж в момент времени {self.timer_counter}")
             
         if (self.frequency_sum > 1):
-            self.frequency_sum = 0
+            self.frequency_sum = 0            
             
     def take_requests_before_time(self, current_timer_counter):
         new_requests = {'up': [], 'down': []}

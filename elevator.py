@@ -16,9 +16,7 @@ class Elevator:
 
     def run(self):
         """Основная логика работы лифта"""
-        
-        
-        
+                    
         # Если лифт стоит (direction = 0), ищем ближайший этаж с запросом
         if self.direction == 0:
             next_floor = self.find_closest_request()
@@ -77,7 +75,6 @@ class Elevator:
         self.timer_counter = self.timer_counter + (self.travel_time * travel_floors)
         self.current_floor = target_floor
         print(f"Лифт {self.id + 1} прибыл на этаж {self.current_floor + 1} в момент времени {self.timer_counter}")
-        print()
         if self.timer_counter >= self.all_time:
             return 0
                 
