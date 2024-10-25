@@ -24,7 +24,7 @@ class ElevatorSystemRun:
                     self.floors[j].timer_counter = self.floors[j].timer_counter + 1
                     is_stop_simulation = False
                     
-            print()
+            # print()
                         
             if is_increase_time == True:
                 for j in range(len(self.floors)):
@@ -60,7 +60,7 @@ class ElevatorSystemRun:
             total_passengers_in_elevators = total_passengers_in_elevators + self.elevators[i].total_passengers_all_time
             total_waiting_pass_destination = total_waiting_pass_destination + self.elevators[i].total_waiting_pass_destination 
         
-        print(f"\tОбщее время ожидания пассажирами: {total_waiting_pass_destination}")
+        # print(f"\tОбщее время ожидания пассажирами: {total_waiting_pass_destination}")
         print(f"\tОбщее число проезжащих в лифтах пассажиров: {total_passengers_in_elevators}")
         if (total_passengers_in_elevators != 0):
             average_time_of_waititng = total_waiting_pass_destination / total_passengers_in_elevators
