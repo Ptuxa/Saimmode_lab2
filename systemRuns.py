@@ -43,9 +43,8 @@ class SystemRuns:
             print()
             
     def report_statistics(self):
-        print("\n\n")
-        number_runs = self.data['number_runs']
-        print()
+        print("\n\n\n")
+        number_runs = self.data['number_runs']        
         print(f"======================= Статиситика прогонов (усреднённая): =========================================")
         # print(f"\tОбщее время ожидания пассажирами: {self.runs_total_waiting_pass_destination / number_runs}")
         print(f"\tОбщее число проезжащих в лифтах пассажиров: {self.runs_total_passengers_in_elevators / number_runs}")

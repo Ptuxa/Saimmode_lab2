@@ -26,7 +26,7 @@ class ElevatorSystemRun:
                     self.floors[j].timer_counter = self.floors[j].timer_counter + 1
                     is_stop_simulation = False
                     
-            print()
+            # print()
                         
             if is_increase_time == True:
                 for j in range(len(self.floors)):
@@ -48,7 +48,7 @@ class ElevatorSystemRun:
                             break        
             
     def report_statistics(self):
-        self.activities_statistics.show_activity_info()
+        # self.activities_statistics.show_activity_info()
         
         total_passengers_in_elevators = 0
         total_passengers = 0
