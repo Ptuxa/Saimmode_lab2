@@ -64,8 +64,9 @@ class ActivityInfoStatistics:
                 last_interval = consolidated_intervals[-1]
                 # Проверяем, что активности и типы совпадают
                 if (last_interval.activity_count == interval.activity_count and
-                        last_interval.typeValue == interval.typeValue):
+                        (last_interval.typeValue in [1, 2]) and (interval.typeValue in [1,2])):
                     last_interval.end_time = interval.end_time  # Обновляем конец последнего интервала
+                    last_interval.typeValue = min(last_interval.typeValue, interval.typeValue)
                 else:
                     consolidated_intervals.append(interval)
             else:
