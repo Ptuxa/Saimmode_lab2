@@ -7,5 +7,6 @@ The unit of model time will be 1 minute. The IE will be terminated after the spe
 1) total number of elevator trips (discrete response);
 2) the total number of passengers carried by the elevators (discrete response);
 3) total number of passengers who waited for an elevator (discrete response);
-4) the average time it takes for a passenger to get to the floor they want (continuous response), 
-where - total time of passengers waiting for the elevator, elevator loading, time needed for the elevator to get to the floor needed by the passenger, time of unloading passengers from the elevator.
+4) the average time it takes for a passenger to get to the floor they want (discrete response), 
+where - total time of passengers waiting for the elevator, elevator loading, time needed for the elevator to get to the floor needed by the passenger, time of unloading passengers from the elevator;
+5) elevators occupancy rate (continuous response). 
