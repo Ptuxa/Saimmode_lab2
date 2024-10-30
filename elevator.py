@@ -1,5 +1,5 @@
 class Elevator:
-    def __init__(self, elevator_id, capacity, travel_time, load_time, floors, all_time):
+    def __init__(self, elevator_id, capacity, travel_time, load_time, activitiesStatistics, floors, all_time):
         self.id = elevator_id
         self.capacity = capacity
         self.travel_time = travel_time
@@ -10,6 +10,7 @@ class Elevator:
         self.passengers = []
         self.total_passengers_all_time = 0 
         self.total_waiting_pass_destination = 0
+        self.activitiesStatistics = activitiesStatistics
         self.floors = floors
         self.timer_counter = 0
         self.all_time = all_time
@@ -66,16 +67,21 @@ class Elevator:
     def direction_to_str(self):
         """Преобразование направления в строку для запроса"""
         return 'up' if self.direction == 1 else 'down'
-
+    
     def move_to_floor(self, target_floor):
         """Перемещение лифта на другой этаж"""
         self.total_trips = self.total_trips + 1 
         # print(f"Лифт {self.id + 1} перемещается с {self.current_floor + 1} этажа на {target_floor + 1} этаж в момент времени {self.timer_counter}")
         travel_floors = abs(self.current_floor - target_floor)  # Время перемещения пропорционально расстоянию
-        self.timer_counter = self.timer_counter + (self.travel_time * travel_floors)
+        
+        before_timer_counter = self.timer_counter
+        self.timer_counter = min(self.timer_counter + (self.travel_time * travel_floors), self.all_time)
+        self.activitiesStatistics.append_acivities_statistics(before_timer_counter, self.timer_counter, 1, 0)        
+
         self.current_floor = target_floor
         # print(f"Лифт {self.id + 1} прибыл на этаж {self.current_floor + 1} в момент времени {self.timer_counter}")
-        if self.timer_counter >= self.all_time:
+        
+        if self.timer_counter == self.all_time:
             return 0
                 
     def load_unload_passengers(self):
@@ -106,9 +112,11 @@ class Elevator:
         # print(f"В лифте {self.id + 1} после загрузки пассажиров стало {len(self.passengers)} человек")
         # print()
 
-        self.timer_counter = self.timer_counter + self.load_time
+        before_timer_counter = self.timer_counter
+        self.timer_counter = min(self.timer_counter + self.load_time, self.all_time)
+        self.activitiesStatistics.append_acivities_statistics(before_timer_counter, self.timer_counter, 0, 1)        
         
-        if self.timer_counter >= self.all_time:
+        if self.timer_counter == self.all_time:
             return 0
 
     def find_next_request(self):
@@ -136,8 +144,7 @@ class Elevator:
         return None
     
     def increase_timer_counter(self, timestamp):
-        if (timestamp <= self.all_time):
-            self.timer_counter = timestamp
-        else:
-            self.timer_counter = self.all_time
+        before_timer_counter = self.timer_counter
+        self.timer_counter = min(max(timestamp, before_timer_counter), self.all_time)        
         
+        self.activitiesStatistics.append_acivities_statistics(before_timer_counter, self.timer_counter, 0, 2)
