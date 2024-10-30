@@ -1,11 +1,11 @@
 {
-    "number_runs": 2,
+    "number_runs": 1,
     "runs": [
         {
             "num_elevators": 2,
-            "travel_time": 0.05,
+            "travel_time": 0.02,
             "load_time": 0.0833,
-            "floor_frequency": [3, 1, 1, 2, 2, 2, 2, 2, 2],
+            "floor_frequency": [5, 1, 1, 1, 1, 1, 1, 1, 1],
             "capacities": [6, 8],
             "probability_matrix": [
                 [0, 0.1, 0.1, 0.1, 0.1, 0.2, 0.2, 0.1, 0.1],
@@ -18,7 +18,7 @@
                 [0.2, 0.1, 0.1, 0.1, 0.1, 0.2, 0.1, 0, 0.1],
                 [0.2, 0.1, 0.1, 0.1, 0.1, 0.2, 0.1, 0.1, 0]
             ],
-            "time_limit": 5
+            "time_limit": 3
         }
     ]
 }
