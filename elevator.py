@@ -79,7 +79,7 @@ class Elevator:
         self.activitiesStatistics.append_acivities_statistics(before_timer_counter, self.timer_counter, 1, 0)        
 
         self.current_floor = target_floor
-        # print(f"Лифт {self.id + 1} прибыл на этаж {self.current_floor + 1} в момент времени {self.timer_counter}")
+        print(f"Лифт {self.id + 1} прибыл на этаж {self.current_floor + 1} в момент времени {self.timer_counter}")
         
         if self.timer_counter == self.all_time:
             return 0
