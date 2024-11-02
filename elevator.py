@@ -86,9 +86,9 @@ class Elevator:
                 
     def load_unload_passengers(self):
         """Загрузка и выгрузка пассажиров"""
-        # print(f"Лифт {self.id + 1} выгружает пассажиров на {self.current_floor + 1} этаж в момент времени {self.timer_counter}")
+        print(f"Лифт {self.id + 1} выгружает пассажиров на {self.current_floor + 1} этаж в момент времени {self.timer_counter}")
         
-        # print(f"До выгрузки в лифте {self.id + 1} было {len(self.passengers)} человек")
+        print(f"До выгрузки в лифте {self.id + 1} было {len(self.passengers)} человек")
         # Выгрузка пассажиров на нужном этаже
         
         for passengerInfo in self.passengers[:]:
@@ -96,25 +96,25 @@ class Elevator:
                 self.total_waiting_pass_destination = self.total_waiting_pass_destination + (self.timer_counter - passengerInfo[1]) + self.load_time
                 self.passengers.remove(passengerInfo)                
         
-        # print(f"После выгрузки в лифте {self.id + 1} стало {len(self.passengers)} человек")
+        print(f"После выгрузки в лифте {self.id + 1} стало {len(self.passengers)} человек")
 
         # Загрузка новых пассажиров с очереди
         current_floor_requests = self.floors[self.current_floor].take_requests_before_time(self.timer_counter)[self.direction_to_str()]
         while current_floor_requests and len(self.passengers) < self.capacity:
             self.total_passengers_all_time = self.total_passengers_all_time + 1
             values = current_floor_requests.pop(0)
-            # print(f"target floor: {values[0] + 1}")
-            # print(f"timer_marker: {values[1]}")
-            self.passengers.append((values[0], values[1]))
-        
-        self.floors[self.current_floor].requests[self.direction_to_str()] = current_floor_requests
+            print(f"target floor: {values[0] + 1}")
+            print(f"timer_marker: {values[1]}")
             
-        # print(f"В лифте {self.id + 1} после загрузки пассажиров стало {len(self.passengers)} человек")
-        # print()
+            self.floors[self.current_floor].requests[self.direction_to_str()].remove((values[0], values[1]))
+            self.passengers.append((values[0], values[1]))
+            
+        print(f"В лифте {self.id + 1} после загрузки пассажиров стало {len(self.passengers)} человек")
+        print()
 
         before_timer_counter = self.timer_counter
         self.timer_counter = min(self.timer_counter + self.load_time, self.all_time)
-        self.activitiesStatistics.append_acivities_statistics(before_timer_counter, self.timer_counter, 0, 1)        
+        self.activitiesStatistics.append_acivities_statistics(before_timer_counter, self.timer_counter, 1, 0)        
         
         if self.timer_counter == self.all_time:
             return 0
