@@ -75,13 +75,18 @@ class ActivityInfoStatistics:
         # Обновляем основное хранилище слияния
         self.activities_statistics = consolidated_intervals
 
-    def average(self):
-        activities_statistics_total = sum(item.activity_count for item in self.activities_statistics)
+    def average(self, time_limit):
+        activities_statistics_total = 0 
+        time_summary = 0 
+        for item in self.activities_statistics:
+            count = item.activity_count
+            time = item.end_time - item.start_time
+            time_summary = time_summary + time 
+            activities_statistics_total = activities_statistics_total + (item.activity_count * (item.end_time - item.start_time))
+            
+        
 
-        if len(self.activities_statistics) == 0:
-            return None    
-
-        return activities_statistics_total / len(self.activities_statistics)
+        return activities_statistics_total / (time_limit)
 
     def show_activity_info(self):      
         print()

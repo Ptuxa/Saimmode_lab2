@@ -26,6 +26,11 @@ class ElevatorSystemRun:
                     self.floors[j].timer_counter = self.floors[j].timer_counter + 1
                     is_stop_simulation = False
                     
+            # for i in range(len(self.floors)):
+                # print(f"floor {i + 1} requests:")                
+                # for direction, requests in self.floors[i].requests.items():                                    
+                    # print(f"\t{direction}: {len(requests)}")
+                    
             # print()
                         
             if is_increase_time == True:
@@ -45,7 +50,11 @@ class ElevatorSystemRun:
                         is_stop_simulation = False
                         if self.elevators[j].run() == 1: 
                             is_increase_time = True                                                        
-                            break        
+                            break
+            elif is_stop_simulation == True:
+                for j in range(len(self.elevators)):
+                    self.elevators[j].increase_timer_counter(self.time_limit)
+                
             
     def report_statistics(self):
         # self.activities_statistics.show_activity_info()
@@ -57,6 +66,10 @@ class ElevatorSystemRun:
         average_time_of_waititng = float('inf')
         
         for i in range(len(self.floors)):
+            reuestsLength = 0
+            for direction, requests in self.floors[i].requests.items():                                    
+                reuestsLength = reuestsLength + len(requests)
+            # print(f"floor {i + 1} requests: {reuestsLength}")
             total_passengers = total_passengers + self.floors[i].total_passengers  
             
         for i in range(len(self.elevators)):
@@ -65,7 +78,7 @@ class ElevatorSystemRun:
             total_passengers_in_elevators = total_passengers_in_elevators + self.elevators[i].total_passengers_all_time
             total_waiting_pass_destination = total_waiting_pass_destination + self.elevators[i].total_waiting_pass_destination 
             
-        average_occupancy_rate = self.activities_statistics.average()
+        average_occupancy_rate = self.activities_statistics.average(self.time_limit)
         
         # print(f"\tОбщее время ожидания пассажирами: {total_waiting_pass_destination}")
         print(f"\tОбщее число проезжащих в лифтах пассажиров: {total_passengers_in_elevators}")
