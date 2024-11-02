@@ -26,10 +26,10 @@ class ElevatorSystemRun:
                     self.floors[j].timer_counter = self.floors[j].timer_counter + 1
                     is_stop_simulation = False
                     
-            for i in range(len(self.floors)):
-                print(f"floor {i + 1} requests:")                
-                for direction, requests in self.floors[i].requests.items():                                    
-                    print(f"\t{direction}: {len(requests)}")
+            # for i in range(len(self.floors)):
+                # print(f"floor {i + 1} requests:")                
+                # for direction, requests in self.floors[i].requests.items():                                    
+                    # print(f"\t{direction}: {len(requests)}")
                     
             # print()
                         
@@ -57,7 +57,7 @@ class ElevatorSystemRun:
                 
             
     def report_statistics(self):
-        self.activities_statistics.show_activity_info()
+        # self.activities_statistics.show_activity_info()
         
         total_passengers_in_elevators = 0
         total_passengers = 0
@@ -69,7 +69,7 @@ class ElevatorSystemRun:
             reuestsLength = 0
             for direction, requests in self.floors[i].requests.items():                                    
                 reuestsLength = reuestsLength + len(requests)
-            print(f"floor {i + 1} requests: {reuestsLength}")
+            # print(f"floor {i + 1} requests: {reuestsLength}")
             total_passengers = total_passengers + self.floors[i].total_passengers  
             
         for i in range(len(self.elevators)):
