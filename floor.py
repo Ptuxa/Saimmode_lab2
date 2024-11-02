@@ -22,7 +22,7 @@ class Floor:
             # Пассажир добавляется в общую очередь на этаже
             self.requests[direction].append((target_floor, self.timer_counter))
             self.total_passengers = self.total_passengers + 1;            
-            # print(f"Пассажир стоит в очереди на {self.floor_id + 1} этаже, намеревается ехать на {target_floor + 1} этаж в момент времени {self.timer_counter}")
+            print(f"Пассажир стоит в очереди на {self.floor_id + 1} этаже, намеревается ехать на {target_floor + 1} этаж в момент времени {self.timer_counter}")
             
         if (self.frequency_sum > 1):
             self.frequency_sum = 0            
