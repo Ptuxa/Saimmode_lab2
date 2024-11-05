@@ -1,9 +1,17 @@
 from elevetorSystem import ElevatorSystemRun
+from scipy.stats import kstest
 
 
 class SystemRuns:
     def __init__(self, data):
         self.data = data
+        self.runs_arr_waiting_pass_destination = []
+        self.runs_arr_passengers_in_elevators = []
+        self.runs_arr_average_time_of_waititng = []
+        self.runs_arr_total_trips = []
+        self.runs_arr_total_passengers = []
+        self.runs_arr_total_passengers = []
+        
         self.runs_total_waiting_pass_destination = 0
         self.runs_total_passengers_in_elevators = 0
         self.runs_average_time_of_waititng = 0
@@ -56,3 +64,15 @@ class SystemRuns:
         print(f"\tОбщее количество пассажиров: {self.runs_total_passengers / number_runs}")
         print(f"\tКоэффицент загрузки лифтов: {self.runs_average_occupancy_rate / number_runs}")
         print("\n")
+        
+    def normality_of_response_distribution(arr_resonses, text_info):
+        # Тест Колмогорова-Смирнова для сравнения с нормальным распределением
+        kstest_stat, kstest_p_value = kstest(arr_resonses, 'norm')
+        print(f"{text_info}: ")
+        print(f"Колмогоров-Смирнов статистика: {kstest_stat}, p-значение: {kstest_p_value}")
+        
+        if kstest_p_value > 0.05:
+            return print(f"Данные можно считать нормально распределёнными.")
+        
+        print()
+        
